@@ -263,7 +263,7 @@ definitions:
       notifications_enabled:
         type: boolean
     type: object
-host: localhost:8080
+host: 176.109.104.126:8080
 info:
   contact: {}
   description: AntonioKrasava

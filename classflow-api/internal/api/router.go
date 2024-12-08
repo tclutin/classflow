@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"github.com/tclutin/classflow-api/internal/api/http/middleware"
 	"github.com/tclutin/classflow-api/internal/config"
 
 	v1 "github.com/tclutin/classflow-api/internal/api/http/v1"
@@ -22,7 +23,7 @@ func NewRouter(services *domain.Services, cfg *config.Config) *gin.Engine {
 
 	router := gin.Default()
 
-	router.Use(gin.Logger(), gin.Recovery())
+	router.Use(gin.Logger(), gin.Recovery(), middleware.CORSMiddleware())
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

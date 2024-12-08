@@ -58,3 +58,22 @@ func RoleMiddleware(roles ...string) gin.HandlerFunc {
 		c.AbortWithStatusJSON(http.StatusForbidden, response.NewAPIError("you do not have permission to access this resource"))
 	}
 }
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Устанавливаем заголовки для CORS
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*") // Можно заменить "*" на конкретные домены
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length, Content-Type")
+
+		// Обработка OPTIONS-запросов
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusOK)
+			return
+		}
+
+		// Продолжаем обработку запроса
+		c.Next()
+	}
+}

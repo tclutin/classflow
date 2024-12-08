@@ -10,7 +10,7 @@ import (
 //	@version		1.0
 //	@description	AntonioKrasava
 
-//	@host		localhost:8080
+//	@host		176.109.104.126:8080
 //	@BasePath	/api/v1
 
 //	@securityDefinitions.apikey	ApiKeyAuth
