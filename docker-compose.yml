@@ -1,0 +1,54 @@
+services:
+  db:
+    restart: always
+    image: postgres:17.0-alpine3.20
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - TZ=Asia/Yekaterinburg
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    restart: always
+    build: ./classflow-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Yekaterinburg
+    volumes:
+      - ./classflow-api/logs:/app/logs
+
+  notification-service:
+    restart: always
+    build: ./classflow-notification
+    ports:
+      - "8091:8091"
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Yekaterinburg
+    volumes:
+      - ./classflow-notification/logs:/app/logs
+  
+  redis:
+    restart: always
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+  
+  bot:
+    restart: always
+    build: ./classflow-bot
+    depends_on:
+      - redis
+      - app
+    environment:
+      - REDIS_HOST=redis
+
